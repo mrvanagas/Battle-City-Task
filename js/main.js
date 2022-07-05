@@ -1,3 +1,11 @@
+import GameMap from "./map.js";
+
+const canvas = document.getElementById('game-map')
+const ctx = canvas.getContext('2d')
+const tileSize = 64
+
+const gameMap = new GameMap(tileSize);
+
 
 var GAME_TIMER_INTERVAL = 1000; // sets the time interval for which one step in the game will be performed
 var PLAYER_LIFE_COUNT = 3;
@@ -24,6 +32,8 @@ function gameInitialization() {
 }
 
 function gameLoop() {
+    gameMap.draw(canvas, ctx);
+
     if (IS_GAME_OVER !== true) {
 
         /**
