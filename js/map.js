@@ -18,6 +18,8 @@ const MAP = [
 ];
 const tileSize = 64
 
+//I have adapted the all rendering from the Tank example, however I see that there is some code duplication happening, mainly with createSprite and draw methods.
+//Perhaps it is possible to put them in a separate file/module and call them when needed?
 class Wall {
     constructor(name, position, tileSize, picture) {
         this.name = name;
@@ -76,7 +78,7 @@ export default class GameMap {
     generateObjects() {
         const tanks = [];
         const walls = [];
-        console.log(walls)
+        console.log('walls', walls)
         console.log(tanks)
         for (let row = 0; row < this.MAP.length; row++) {
             for (let column = 0; column < this.MAP[row].length ; column++) {
@@ -84,7 +86,7 @@ export default class GameMap {
                 let image = null;
                 switch (tile) {
                     case 3:
-                       // const wall = new Wall(....)
+                       // This current code example works properly, it renders the walls correctly and assigns the correct values.
                        const gameWall = new GameWall(row + '-' + column, {
                         x: column,
                         y: row
@@ -92,6 +94,16 @@ export default class GameMap {
                        tileSize)
                        walls.push(gameWall)
                        break;
+
+                       // However, if we write more info, like a wall name, the assigned values get mixed up which you could see in console.log
+                    //    const gameWall = new GameWall('wallname', row + '-' + column, {
+                    //     x: column,
+                    //     y: row
+                    //    },
+                    //    tileSize)
+                    //    walls.push(gameWall)
+                    //    break;
+                       
                     case 1:
                         const playerTank = new PlayerTank(10, 'playertank' + row + '-' + column, {
                             x: column,
