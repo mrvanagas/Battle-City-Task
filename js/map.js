@@ -86,8 +86,7 @@ export default class GameMap {
                 let image = null;
                 switch (tile) {
                     case 3:
-                       // This current code example works properly, it renders the walls correctly and assigns the correct values.
-                       const gameWall = new GameWall(row + '-' + column, {
+                       const gameWall = new GameWall('wall' + row + '-' + column, {
                         x: column,
                         y: row
                        },
@@ -95,15 +94,6 @@ export default class GameMap {
                        walls.push(gameWall)
                        break;
 
-                       // However, if we write more info, like a wall name, the assigned values get mixed up which you could see in console.log
-                    //    const gameWall = new GameWall('wallname', row + '-' + column, {
-                    //     x: column,
-                    //     y: row
-                    //    },
-                    //    tileSize)
-                    //    walls.push(gameWall)
-                    //    break;
-                       
                     case 1:
                         const playerTank = new PlayerTank(10, 'playertank' + row + '-' + column, {
                             x: column,
