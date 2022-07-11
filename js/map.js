@@ -1,124 +1,115 @@
-import {PlayerTank, EnemyTank} from './tanks/baseTank.js'
-
-const MAP = [
-    [2, 0, 0, 3, 0, 0, 2, 0, 0, 3, 0, 0, 2],
-    [0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0],
-    [0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0],
-    [0, 0, 0, 3, 0, 0, 0, 0, 3, 3, 3, 0, 0],
-    [0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [3, 3, 3, 0, 0, 3, 3, 3, 0, 0, 3, 3, 3],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 3, 3, 3, 3, 0, 3, 3, 3, 3, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1, 3, 0, 3, 0, 0, 0, 0, 0]
-];
-const tileSize = 64
-
-//I have adapted the all rendering from the Tank example, however I see that there is some code duplication happening, mainly with createSprite and draw methods.
-//Perhaps it is possible to put them in a separate file/module and call them when needed?
-class Wall {
-    constructor(name, position, tileSize, picture) {
-        this.name = name;
-        this.position = position;
-        this.tileSize = tileSize;
-        this.picture = picture;
-        this.#createSprite()
-    }
-
-    #createSprite() {
-        this.sprite = new Image();
-        this.sprite.src = `../img/${this.picture}`
-
-    }
-
-    draw(ctx) {
-        // console.log( this.position, this.name)
-        ctx.drawImage(
-            this.sprite,
-            this.position.x * this.tileSize,
-            this.position.y * this.tileSize,
-            this.tileSize,
-            this.tileSize
-        )
-    }
-}
-
-class GameWall extends Wall {
-    constructor(name, position, tileSize){
-        super(name, position, tileSize, 'wall.png')
-    }
-}
+import Tank from "./tanks/tank.js";
+import MovingDirection from "./tanks/MovingDirection.js";
 
 export default class GameMap {
-    constructor() {
-        // this.wall = this.#image('wall.png');
-        this.MAP = MAP;
+    constructor(tileSize) {
+        this.tileSize = tileSize
 
-       
+        this.wall = new Image()
+        this.wall.src = '../img/wall.png'
     }
 
-    // #image(fileName) {
-    //     const img = new Image();
-    //     img.src = `../img/${fileName}`
-    //     return img;
-    // };
+    //map legend
+    //1 - player
+    //2 - enemy
+    //3 - wall
+    map = [
+        [2, 0, 0, 3, 0, 0, 2, 0, 0, 3, 0, 0, 2],
+        [0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0],
+        [0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0],
+        [0, 0, 0, 3, 0, 0, 0, 0, 3, 3, 3, 0, 0],
+        [0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [3, 3, 3, 0, 0, 3, 3, 3, 0, 0, 3, 3, 3],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 3, 3, 3, 3, 0, 3, 3, 3, 3, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 3, 0, 3, 0, 0, 0, 0, 0]
+    ];
 
-    
-
-    // draw(canvas, ctx) {
-    //     this.#setCanvasSize(canvas);
-    //     this.#clearCanvas(canvas, ctx);
-    //     this.#drawMap(ctx)
-    // }
-
-    generateObjects() {
-        const tanks = [];
-        const walls = [];
-        console.log('walls', walls)
-        console.log(tanks)
-        for (let row = 0; row < this.MAP.length; row++) {
-            for (let column = 0; column < this.MAP[row].length ; column++) {
-                const tile = this.MAP[row][column];
-                let image = null;
-                switch (tile) {
-                    case 3:
-                       const gameWall = new GameWall('wall' + row + '-' + column, {
-                        x: column,
-                        y: row
-                       },
-                       tileSize)
-                       walls.push(gameWall)
-                       break;
-
-                    case 1:
-                        const playerTank = new PlayerTank(10, 'playertank' + row + '-' + column, {
-                            x: column,
-                            y: row
-                        }, 
-                        tileSize)
-                        tanks.push(playerTank)
-                        break
-                    case 2:
-                        const enemyTank = new EnemyTank(10, 'EnemyTank' + row + '-' + column, {
-                            x: column,
-                            y: row
-                        },
-                        tileSize)
-                        tanks.push(enemyTank)
-                        break
+    draw(ctx) {
+        for (let row = 0; row < this.map.length; row++) {
+            for (let column = 0; column < this.map[row].length; column++) {
+                let tile = this.map[row][column]
+                if (tile === 3) {
+                    this.#drawWall(ctx, column, row, this.tileSize)
                 }
             }
         }
+    }
 
-        return {
-            tanks,
-            walls
+    #drawWall(ctx, column, row, size) {
+        ctx.drawImage(
+            this.wall, 
+            column * this.tileSize, 
+            row * this.tileSize,
+            size,
+            size
+        )
+    }
+
+    getTank(velocity) {
+        for (let row = 0; row < this.map.length; row++) {
+            for (let column = 0; column < this.map[row].length; column++) {
+                let tile = this.map[row][column]
+                if (tile === 1) {
+                    return new Tank(
+                        column * this.tileSize,
+                        row * this.tileSize,
+                        this.tileSize,
+                        velocity,
+                        this
+                    )
+                }
+            }
         }
     }
 
-   
+    setCanvasSize(canvas) { //we set here the size of the game map/canvas relative to the tileSize constant
+        canvas.width = this.map[0].length * this.tileSize;
+        canvas.height = this.map.length * this.tileSize
+    }
+
+    didCollideWithEnvironment(x, y, direction) {
+        if(
+        Number.isInteger(x / this.tileSize) && 
+        Number.isInteger(y / this.tileSize)
+        ) {
+            let column  = 0;
+            let row = 0;
+            let nextColumn = 0;
+            let nextRow = 0;
+
+            switch(direction) {
+                case MovingDirection.right:
+                    nextColumn = x + this.tileSize;
+                    column = nextColumn / this.tileSize;
+                    row = y / this.tileSize;
+                    break;
+                case MovingDirection.left:
+                    nextColumn = x - this.tileSize;
+                    column = nextColumn / this.tileSize;
+                    row = y / this.tileSize;
+                    break;
+                case MovingDirection.up:
+                    nextRow = y - this.tileSize;
+                    row = nextRow / this.tileSize;
+                    column = x / this.tileSize
+                    break;
+                case MovingDirection.down:
+                    nextRow = y + this.tileSize;
+                    row = nextRow / this.tileSize;
+                    column = x / this.tileSize
+                    break;
+            }
+            const tile = this.map[row][column];
+            if(tile === 3) {
+                return true
+            }
+        }
+        return false;
+    }
 }

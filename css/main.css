@@ -42,7 +42,7 @@ main {
 #game-map {
     width: 832px;
     height: 896px;
-    background: #111;
+    background: rgb(0, 0, 0);
 }
 #legend {
     flex: 1 30%;
