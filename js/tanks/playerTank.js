@@ -6,6 +6,7 @@ export default class PlayerTank extends Tank {
         super(x, y, tileSize, velocity, gameMap, 'player-tank.png')
         
         document.addEventListener('keydown', this.#keydown)
+        document.addEventListener('keyup', this.#keyup)
 
     }
 
@@ -33,7 +34,10 @@ export default class PlayerTank extends Tank {
                 this.currentMovingDirection = MovingDirection.right;
             this.requestedMovingDirection = MovingDirection.right
         } 
+    }
 
+    #keyup = () => {
+        this.requestedMovingDirection = null
     }
 
 }

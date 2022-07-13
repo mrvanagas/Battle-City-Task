@@ -19,37 +19,27 @@ export default class Tank {
         this.#move();
 
         ctx.drawImage(
-            this.tankImages[this.tankImgIndex], 
-            this.x, 
-            this.y, 
+            this.tankImage, 
+            this.x * this.tileSize, 
+            this.y * this.tileSize, 
             this.tileSize, 
             this.tileSize)
     }
 
     #createSprite(){
-        const tankImage = new Image();
-        tankImage.src = `../../img/${this.picture}`
-
-        this.tankImages = [
-            tankImage //0
-        ]
-
-        this.tankImgIndex = 0
+        this.tankImage = new Image();
+        this.tankImage.src = `../../img/${this.picture}`
     }
 
 
     #move() {
         if(this.currentMovingDirection !== this.requestedMovingDirection) {
-            if (
-            Number.isInteger(this.x / this.tileSize) && 
-            Number.isInteger(this.y / this.tileSize)
-            ) {
                 if(!this.gameMap.didCollideWithEnvironment(
                     this.x,
                     this.y, 
                     this.requestedMovingDirection))
                 this.currentMovingDirection = this.requestedMovingDirection;
-            }
+            
         }
 
         if(this.gameMap.didCollideWithEnvironment(
@@ -60,19 +50,23 @@ export default class Tank {
                 return;
             }
 
-        switch(this.currentMovingDirection){
-            case MovingDirection.up:
-                this.y -= this.velocity;
-                break;
-            case MovingDirection.down:
-                this.y += this.velocity;
-                break;
-            case MovingDirection.left:
-                this.x -= this.velocity;
-                break;
-            case MovingDirection.right:
-                this.x += this.velocity
-                break;
+        if (
+            this.requestedMovingDirection
+        )  {
+            switch(this.currentMovingDirection){
+                case MovingDirection.up:
+                    this.y -= this.velocity;
+                    break;
+                case MovingDirection.down:
+                    this.y += this.velocity;
+                    break;
+                case MovingDirection.left:
+                    this.x -= this.velocity;
+                    break;
+                case MovingDirection.right:
+                    this.x += this.velocity
+                    break;
+            }
         }
     }
 }
