@@ -1,17 +1,16 @@
 import MovingDirection from './MovingDirection.js'
 
 export default class Tank {
-    constructor(x, y, tileSize, velocity, gameMap) {
+    constructor(x, y, tileSize, velocity, gameMap, picture) {
         this.x = x;
         this.y = y;
         this.tileSize = tileSize;
         this.velocity = velocity;
         this.gameMap = gameMap;
+        this.picture = picture
 
         this.currentMovingDirection = null;
         this.requestedMovingDirection = null;
-
-        document.addEventListener('keydown', this.#keydown)
 
         this.#createSprite();
     }
@@ -29,7 +28,7 @@ export default class Tank {
 
     #createSprite(){
         const tankImage = new Image();
-        tankImage.src = '../../img/player-tank.png'
+        tankImage.src = `../../img/${this.picture}`
 
         this.tankImages = [
             tankImage //0
@@ -38,32 +37,6 @@ export default class Tank {
         this.tankImgIndex = 0
     }
 
-    #keydown = (event) => { //arow function, so that "this" is always directed at tank class
-        if (event.keyCode == 38){ //Up arrow
-            if(this.currentMovingDirection == MovingDirection.down)
-                this.currentMovingDirection = MovingDirection.up;
-            this.requestedMovingDirection = MovingDirection.up
-        } 
-
-        if (event.keyCode == 40){ //Down arrow
-            if(this.currentMovingDirection == MovingDirection.up)
-                this.currentMovingDirection = MovingDirection.down;
-            this.requestedMovingDirection = MovingDirection.down
-        } 
-
-        if (event.keyCode == 37){ //Left arrow
-            if(this.currentMovingDirection == MovingDirection.right)
-                this.currentMovingDirection = MovingDirection.left;
-            this.requestedMovingDirection = MovingDirection.left
-        } 
-
-        if (event.keyCode == 39){ //Right arrow
-            if(this.currentMovingDirection == MovingDirection.left)
-                this.currentMovingDirection = MovingDirection.right;
-            this.requestedMovingDirection = MovingDirection.right
-        } 
-
-    }
 
     #move() {
         if(this.currentMovingDirection !== this.requestedMovingDirection) {

@@ -1,5 +1,8 @@
-import Tank from "./tanks/tank.js";
+import PlayerTank from "./tanks/playerTank.js";
+import enemyTank from './tanks/enemyTank.js'
+
 import MovingDirection from "./tanks/MovingDirection.js";
+import EnemyTank from "./tanks/enemyTank.js";
 
 export default class GameMap {
     constructor(tileSize) {
@@ -51,12 +54,12 @@ export default class GameMap {
         )
     }
 
-    getTank(velocity) {
+    getPlayerTank(velocity) {
         for (let row = 0; row < this.map.length; row++) {
             for (let column = 0; column < this.map[row].length; column++) {
                 let tile = this.map[row][column]
                 if (tile === 1) {
-                    return new Tank(
+                    return new PlayerTank(
                         column * this.tileSize,
                         row * this.tileSize,
                         this.tileSize,
@@ -66,6 +69,27 @@ export default class GameMap {
                 }
             }
         }
+    }
+
+    getEnemyTanks(velocity) {
+        const enemies = []
+
+        for(let row = 0; row < this.map.length; row++) {
+            for(let column = 0; column < this.map[row].length; column++) {
+                const tile = this.map[row][column];
+                if (tile === 2) {
+                    this.map[row][column] = 0;
+                    enemies.push(new EnemyTank(
+                        column * this.tileSize,
+                        row * this.tileSize,
+                        this.tileSize,
+                        velocity,
+                        this
+                    ))
+                }
+            }
+        }
+        return enemies;
     }
 
     setCanvasSize(canvas) { //we set here the size of the game map/canvas relative to the tileSize constant

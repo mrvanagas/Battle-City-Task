@@ -7,13 +7,16 @@ const canvas = document.getElementById('game-map')
 const ctx = canvas.getContext('2d')
 
 const gameMap = new GameMap(tileSize)
-const tank = gameMap.getTank(velocity)
+const playerTank = gameMap.getPlayerTank(velocity)
+const enemyTanks = gameMap.getEnemyTanks(velocity)
 
-console.log(tank)
+console.log(playerTank)
+console.log(enemyTanks)
 
 function gameLoop() {
     gameMap.draw(ctx);
-    tank.draw(ctx)
+    playerTank.draw(ctx)
+    enemyTanks.forEach((enemy) => enemy.draw(ctx))
 }
 
 gameMap.setCanvasSize(canvas)
