@@ -23,7 +23,7 @@ function gameLoop() {
 }
 
 gameMap.setCanvasSize(canvas)
-setInterval(gameLoop, 1000 / 17)
+setInterval(gameLoop, 1000 / 6)
 
 function clearCanvas(canvas, ctx) {
     ctx.fillStyle = "black";
