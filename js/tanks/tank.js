@@ -31,7 +31,6 @@ export default class Tank {
         this.tankImage.src = `../../img/${this.picture}`
     }
 
-
     #move() {
         if(this.currentMovingDirection !== this.requestedMovingDirection) {
                 if(!this.gameMap.didCollideWithEnvironment(
@@ -67,6 +66,8 @@ export default class Tank {
                     this.x += this.velocity
                     break;
             }
+
+            console.log('player movement', this.requestedMovingDirection)
         }
     }
 }
